@@ -1,5 +1,9 @@
 const { Schema, Mongoose, model } = require('mongoose');
 
+const OTPSchema = Schema({
+  code: { type: String, required: false, default: undefined },
+  expiresIn: { type: Number, required: false, default: 0 },
+});
 const userSchema = Schema(
   {
     fullName: { type: String, required: false },
@@ -9,11 +13,7 @@ const userSchema = Schema(
   },
   { timestamps: true }
 );
-const OTPSchema = Schema({
-  code: { type: String, required: false, default: undefined },
-  expiresIn: { type: Number, required: false, default: 0 },
-});
 
 const userModel = model('user', userSchema);
 
-module.exports = userModel; 
+module.exports = userModel;
