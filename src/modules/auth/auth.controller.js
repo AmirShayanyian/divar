@@ -1,8 +1,11 @@
+const authService = require('./auth.service');
+const autoBind = require('auto-bind');
 class AuthController {
   #service;
-  // constructor(
-
-  // )
+  constructor() {
+    this.#service = authService;
+    autoBind(this);
+  }
 
   static async sendOTP(req, res, next) {
     try {
