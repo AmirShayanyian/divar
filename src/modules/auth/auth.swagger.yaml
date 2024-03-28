@@ -4,7 +4,7 @@ info:
   title: "Auth API"
 tags:
 - name: "Auth"
-  description: "Authentication Module and Routes"
+  description: "Authentication Routes"
 paths:
   /auth/send-otp:
     post:
