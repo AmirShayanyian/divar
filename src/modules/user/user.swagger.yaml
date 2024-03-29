@@ -1,0 +1,29 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "User APIs"
+tags:
+  - name: "User"
+    description: "User Routes"
+paths:
+  /user/profile:
+    get:
+      summary: "Get user profile"
+      tags:
+        - "User"
+
+      responses:
+        200:
+          description: "Successful request"
+        404:
+          description: "Not Found"
+
+components:
+  schemas:
+    SendOTP:
+      type: "object"
+      required:
+        - "mobile"
+      properties:
+        mobile:
+          type: "string"
