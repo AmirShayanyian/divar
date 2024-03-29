@@ -1,6 +1,6 @@
 const autoBind = require('auto-bind');
 const AuthService = require('./auth.service');
-const { createHttpError } = require('http-error');
+const createHttpError = require('http-errors');
 const NodeEnv = require('../../common/constants/env.enum');
 const CookieName = require('../../common/constants/cookie.enum');
 class AuthController {
@@ -67,7 +67,7 @@ class AuthController {
   }
   async logout(req, res, next) {
     try {
-      return res.clearCookie(CookieName.AccessToken).json({
+      return res.status(200).clearCookie(CookieName.AccessToken).json({
         status: 200,
         message: 'User logged out successfully',
       });

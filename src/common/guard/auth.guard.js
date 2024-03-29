@@ -4,8 +4,9 @@ const userModel = require('../../modules/user/user.model');
 const Authorization = async (req, res, next) => {
   try {
     const token = req?.cookies?.access_token;
-    if (!token)
-      return new createHttpError.Unauthorized('Login into your account.');
+    if (!token) {
+      throw new createHttpError.Unauthorized('Login into your account.');
+    }
     const data = jwt.verify(token, process.env.JWT_SECRET_KEY);
     if (data.userId) {
       const user = await userModel
@@ -18,11 +19,12 @@ const Authorization = async (req, res, next) => {
           accessToken: 0,
         })
         .lean();
-      if (!user) return new createHttpError.NotFound('User not found');
+      if (!user) throw new createHttpError.NotFound('User not found');
       req.user = user;
-      return next();
+      console.log('sad');
+      next();
     }
-    return new createHttpError.Unauthorized('Token is invalid');
+    throw new createHttpError.Unauthorized('Token is invalid');
   } catch (error) {
     next(error);
   }

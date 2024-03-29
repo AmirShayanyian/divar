@@ -11,7 +11,7 @@ class UserController {
   async getUserProfile(req, res, next) {
     try {
       const user = req.user;
-      return res.json({
+      return res.status(200).json({
         status: 200,
         message: 'User profile data',
         data: user,
