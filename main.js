@@ -6,6 +6,7 @@ const mongooseConnection = require('./src/config/mongoose.config');
 const swaggerConfig = require('./src/config/swagger.config');
 const NotFoundHandler = require('./src/common/exception/not-found.handler');
 const GlobalExceptionHandler = require('./src/common/exception/global-exception.handler');
+const cookieParser = require('cookie-parser');
 async function main() {
   const app = express();
   const port = process.env.PORT || 3000;
@@ -13,6 +14,7 @@ async function main() {
   swaggerConfig(app);
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
   app.use(mainRouter);
   NotFoundHandler(app);
   GlobalExceptionHandler(app);
