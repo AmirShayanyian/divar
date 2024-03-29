@@ -2,7 +2,7 @@ const autoBind = require('auto-bind');
 const userModel = require('../user/user.model');
 const { randomInt } = require('crypto');
 const createHttpError = require('http-errors');
-const { nextTick } = require('process');
+const jwt = require('jsonwebtoken');
 class AuthService {
   #model;
   constructor() {
@@ -38,18 +38,26 @@ class AuthService {
       const user = await this.#model.findOne({ mobile });
       const now = new Date().getTime();
       if (!user) {
-        console.log('hi');
         return new createHttpError.NotFound('User not found');
       }
       if (user?.otp?.expiresIn < now)
         return new createHttpError.BadRequest('The OTP code has been expired!');
       if (user?.otp?.code !== code)
         return new createHttpError.BadRequest('The OTP code is wrong');
-      if (!user.verifiedMobile) user.verifiedMobile = true;
-      return user;
+      if (!user.verifiedMobile) {
+        user.verifiedMobile = true;
+        await user.save();
+      }
+      const accessToken = await this.signToken({ mobile, userId: user._id });
+      user.accessToken = accessToken;
+      await user.save();
+      return accessToken;
     } catch (error) {
-      throw new Error(err.message);
+      throw new Error(error.message);
     }
+  }
+  async signToken(payload) {
+    return jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1y' });
   }
 }
 

@@ -49,7 +49,7 @@ class AuthController {
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           return res.json({
             error: err.message,
             errorStack: err.stack,
