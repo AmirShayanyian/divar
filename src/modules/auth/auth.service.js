@@ -45,9 +45,10 @@ class AuthService {
         return new createHttpError.BadRequest('The OTP code has been expired!');
       if (user?.otp?.code !== code)
         return new createHttpError.BadRequest('The OTP code is wrong');
+      if (!user.verifiedMobile) user.verifiedMobile = true;
       return user;
     } catch (error) {
-      nextTick(error);
+      throw new Error(err.message);
     }
   }
 }
