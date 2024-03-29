@@ -18,9 +18,9 @@ paths:
               $ref: "#/components/schemas/SendOTP"
       responses:
         200:
-          description: 'Successful request'
+          description: "Successful request"
         404:
-          description: 'Not Found'
+          description: "Not Found"
   /auth/check-otp:
     post:
       summary: "login with OTP in this end-point"
@@ -33,9 +33,17 @@ paths:
               $ref: "#/components/schemas/CheckOTP"
       responses:
         200:
-          description: 'Successful request'
+          description: "Successful request"
         404:
-          description: 'Not Found'
+          description: "Not Found"
+  /auth/logout:
+    get:
+      summary: "Logout user "
+      tags:
+        - "Auth"
+      responses:
+        200:
+          description: "Successful request"
 components:
   schemas:
     SendOTP:
@@ -47,7 +55,7 @@ components:
           type: "string"
     CheckOTP:
       type: "object"
-      required: 
+      required:
         - "mobile"
         - "code"
       properties:
@@ -55,4 +63,3 @@ components:
           type: "string"
         code:
           type: "string"
-

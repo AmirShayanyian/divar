@@ -2,6 +2,7 @@ const autoBind = require('auto-bind');
 const AuthService = require('./auth.service');
 const { createHttpError } = require('http-error');
 const NodeEnv = require('../../common/constants/env.enum');
+const CookieName = require('../../common/constants/cookie.enum');
 class AuthController {
   #service;
   constructor() {
@@ -44,7 +45,7 @@ class AuthController {
         .then((result) => {
           if (result) {
             return res
-              .cookie('access_token', result, {
+              .cookie(CookieName.AccessToken, result, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === NodeEnv.Production,
               })
@@ -60,6 +61,16 @@ class AuthController {
             errorStack: err.stack,
           });
         });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async logout(req, res, next) {
+    try {
+      return res.clearCookie(CookieName.AccessToken).json({
+        status: 200,
+        message: 'User logged out successfully',
+      });
     } catch (error) {
       next(error);
     }
