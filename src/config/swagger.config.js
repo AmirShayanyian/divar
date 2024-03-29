@@ -13,7 +13,7 @@ function swaggerConfig(app) {
     },
     apis: [process.cwd() + '/src/modules/**/**.swagger.yaml'],
   });
-
+  
   const swagger = swaggerUi.setup(swaggerDoc);
   app.use('/swagger', swaggerUi.serve, swagger);
 }
