@@ -13,7 +13,7 @@ const CategorySchema = new Schema(
       default: [],
     },
   },
-  { virtual: true, versionKey: false, id: false }
+  { toJSON: { virtuals: true }, versionKey: false, id: false }
 );
 CategorySchema.virtual('children', {
   ref: 'Category',
