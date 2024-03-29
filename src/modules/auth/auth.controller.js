@@ -35,6 +35,22 @@ class AuthController {
 
   async checkOTP(req, res, next) {
     try {
+      const { mobile, code } = req.body;
+      await this.service
+        .checkOTP(mobile, code)
+        .then((result) => {
+          if (result) {
+            return res.json({
+              data: result,
+              message: 'User logged In successfully',
+            });
+          }
+        })
+        .catch((err) => {
+          return res.json({
+            error: err.message,
+          });
+        });
     } catch (error) {
       next(error);
     }

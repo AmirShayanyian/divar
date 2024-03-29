@@ -2,6 +2,7 @@ const autoBind = require('auto-bind');
 const userModel = require('../user/user.model');
 const { randomInt } = require('crypto');
 const errorModels = require('http-errors');
+const { error } = require('console');
 class AuthService {
   #model;
   constructor() {
@@ -32,6 +33,18 @@ class AuthService {
 
   async checkOTP(mobile, code) {
     try {
+      const user = await this.#model.findOne({ mobile });
+      const now = new Date().getTime();
+      if (!user) {
+        throw new errorModels.NotFound(
+          `User with this ---> ${mobile} mobile-number does not exist`
+        );
+      }
+      if (user?.otp?.expiresIn < now)
+        throw new errorModels.BadRequest('The OTP code has been expired!');
+      if (user?.otp?.code !== code)
+        throw new errorModels.BadRequest('The OTP code is expired!');
+      return user;
     } catch (error) {}
   }
 }
