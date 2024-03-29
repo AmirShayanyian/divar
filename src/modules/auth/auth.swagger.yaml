@@ -3,25 +3,30 @@ info:
   version: "1.0.0"
   title: "Auth API"
 tags:
-- name: "Auth"
-  description: "Authentication Routes"
+  - name: "Auth"
+    description: "Authentication Routes"
 paths:
   /auth/send-otp:
     post:
       summary: "login with OTP in this end-point"
       tags:
-      - "Auth"
+        - "Auth"
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
               $ref: "#/components/schemas/SendOTP"
+      responses:
+        200:
+          description: 'Successful request'
+        404:
+          description: 'Not Found'
 components:
   schemas:
     SendOTP:
       type: "object"
       required:
-      - "mobile"
+        - "mobile"
       properties:
         mobile:
           type: "string"

@@ -7,29 +7,33 @@ class AuthController {
     this.service = new AuthService();
   }
 
-  static async sendOTP(req, res, next) {
+  async sendOTP(req, res, next) {
     try {
       const { mobile } = req.body;
       await this.service
         .sendOTP(mobile)
         .then((result) => {
           if (result) {
-            return res.send({
+            return res.json({
               data: result,
               message: 'User has been created',
             });
           }
-          return res.send({
+          return res.json({
             message: 'OTP has been sent',
           });
         })
-        .catch();
+        .catch((err) => {
+          return res.json({
+            error: err.message,
+          });
+        });
     } catch (error) {
       next(error);
     }
   }
 
-  static async checkOTP(req, res, next) {
+  async checkOTP(req, res, next) {
     try {
     } catch (error) {
       next(error);
@@ -37,4 +41,4 @@ class AuthController {
   }
 }
 
-module.exports = AuthController;
+module.exports = new AuthController();
