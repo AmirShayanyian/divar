@@ -1,6 +1,6 @@
 const autoBind = require('auto-bind');
 const UserService = require('./user.service');
-const { createHttpError } = require('http-error');
+const  createHttpError  = require('http-errors');
 class UserController {
   #service;
   constructor() {
