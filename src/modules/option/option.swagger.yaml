@@ -70,6 +70,8 @@ components:
           type: "string"
         category:
           type: "string"
+        guide:
+          type: "string"
         type:
           type: "string"
           enum:
@@ -81,5 +83,3 @@ components:
           type: "array"
           items:
             type: "string"
-        guide:
-          type: "string"
