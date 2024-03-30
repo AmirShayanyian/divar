@@ -18,9 +18,21 @@ paths:
       responses:
         201:
           description: "Option created Successfully"
-  /option/{categoryId}:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateOption"
     get:
-      summary: "Get all categories"
+      summary: "Get all Options"
+      tags:
+        - "Option"
+      responses:
+        200:
+          description: "Successful !"
+  /option/by-category/{categoryId}:
+    get:
+      summary: "Find option by category-id"
+      description: "Find an option by sending a category-id"
       tags:
         - "Option"
       parameters:
@@ -30,3 +42,44 @@ paths:
       responses:
         200:
           description: "Successful !"
+  /option/{id}:
+    get:
+      summary: "Get all Options"
+      tags:
+        - "Option"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+      responses:
+        200:
+          description: "Successful !"
+components:
+  schemas:
+    CreateOption:
+      type: "object"
+      required:
+        - "title"
+        - "type"
+        - "key"
+        - "category"
+      properties:
+        title:
+          type: "string"
+        key:
+          type: "string"
+        category:
+          type: "string"
+        type:
+          type: "string"
+          enum:
+            - "string"
+            - "boolean"
+            - "number"
+            - "array"
+        enum:
+          type: "array"
+          items:
+            type: "string"
+        guide:
+          type: "string"
