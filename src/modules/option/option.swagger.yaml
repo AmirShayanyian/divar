@@ -29,6 +29,18 @@ paths:
       responses:
         200:
           description: "Successful !"
+  /option/{id}:
+    get:
+      summary: "Get all Options"
+      tags:
+        - "Option"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+      responses:
+        200:
+          description: "Successful !"
   /option/by-category/{categoryId}:
     get:
       summary: "Find option by category-id"
@@ -42,14 +54,15 @@ paths:
       responses:
         200:
           description: "Successful !"
-  /option/{id}:
+  /option/by-category-slug/{slug}:
     get:
-      summary: "Get all Options"
+      summary: "Find option by category-slug"
+      description: "Find an option by sending a category-slug"
       tags:
         - "Option"
       parameters:
         - in: "path"
-          name: "id"
+          name: "slug"
           type: "string"
       responses:
         200:
