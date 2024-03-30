@@ -19,10 +19,21 @@ class CategoryController {
       next(error);
     }
   }
-  async getAll(req, res, next) {
+  async find(req, res, next) {
     try {
       const categories = await this.#service.find();
       return res.json(categories);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async remove(req, res, next) {
+    try {
+      const { id } = req.params;
+      await this.#service.remove(id);
+      return res.json({
+        message: CategoryMessage.Deleted,
+      });
     } catch (error) {
       next(error);
     }

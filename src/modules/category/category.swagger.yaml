@@ -22,14 +22,25 @@ paths:
       responses:
         200:
           description: "Successful request"
-/category:
-  get:
-    summary: "Get all categories"
-    tags:
-      - "Category"
-    responses:
+    get:
+      summary: "Get all categories"
+      tags:
+        - "Category"
+      responses:
+        200:
+          description: "Successful request"
+  /category/{id}:
+    delete:
+      summary: "Find and delete Category by id"
+      tags:
+        - "Category"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+      responses:
       200:
-        description: "Successful request"
+        description: 'Category deleted Successfully'
 components:
   schemas:
     CreateCategory:

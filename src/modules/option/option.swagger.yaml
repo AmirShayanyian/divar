@@ -85,6 +85,7 @@ paths:
         - "Option"
       parameters:
         - in: "path"
+          name: "categoryId"
           required: "true"
           type: "string"
       responses:

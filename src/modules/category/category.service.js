@@ -1,5 +1,6 @@
 const autoBind = require('auto-bind');
 const CategoryModel = require('./category.model');
+const OptionModel = require('../option/option.model');
 const createHttpError = require('http-errors');
 const CategoryMessage = require('./category.message');
 const { isValidObjectId, Types } = require('mongoose');
@@ -7,9 +8,11 @@ const slugify = require('slugify');
 
 class CategoryService {
   #model;
+  #optionModel;
   constructor() {
     autoBind(this);
     this.#model = CategoryModel;
+    this.#optionModel = OptionModel;
   }
   async create(categoryDto) {
     if (categoryDto?.parent && isValidObjectId(categoryDto.parent)) {
@@ -56,6 +59,13 @@ class CategoryService {
       throw new createHttpError.Conflict(CategoryMessage.AlreadyExist);
     }
     return null;
+  }
+  async remove(id) {
+    await this.checkExistById(id);
+    await this.#optionModel.deleteMany({ category: id }).then(async () => {
+      await this.#model.deleteOne({ _id: id });
+    });
+    return true;
   }
 }
 
