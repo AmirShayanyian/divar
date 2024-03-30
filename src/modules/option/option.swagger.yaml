@@ -5,7 +5,7 @@ paths:
   /option:
     post:
       summary: "Create Option Route"
-      description: ''
+      description: ""
       tags:
         - "Option"
       requestBody:
@@ -53,6 +53,30 @@ paths:
       responses:
         200:
           description: "Option Deleted!"
+    put:
+      summary: "Update a Option by id"
+      tags:
+        - "Option"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UpdateOption"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOption"
+      responses:
+        200:
+          description: "Option Updated Successfully"
+          # content:
+          #   application/json:
+          #   schema:
+          #     $ref: "#/components/schemas/UpdateOption"
+
   /option/by-category/{categoryId}:
     get:
       summary: "Find option by category-id"
@@ -98,6 +122,8 @@ components:
           type: "string"
         guide:
           type: "string"
+        required:
+          type: "boolean"
         type:
           type: "string"
           enum:
@@ -109,3 +135,34 @@ components:
           type: "array"
           items:
             type: "string"
+    UpdateOption:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+          nullable: "true"
+        key:
+          type: "string"
+          nullable: "true"
+        category:
+          type: "string"
+          nullable: "true"
+        guide:
+          type: "string"
+          nullable: "true"
+        required:
+          type: "boolean"
+          nullable: "true"
+        type:
+          type: "string"
+          nullable: "true"
+          enum:
+            - "string"
+            - "boolean"
+            - "number"
+            - "array"
+        enum:
+          type: "array"
+          items:
+            type: "string"
+            nullable: "true"

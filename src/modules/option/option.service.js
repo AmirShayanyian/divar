@@ -4,18 +4,19 @@ const createHttpError = require('http-errors');
 const OptionMessage = require('./option.message');
 const { isValidObjectId, Types } = require('mongoose');
 const slugify = require('slugify');
-const CategoryModel = require('../category/category.model');
+const CategoryService = require('../category/category.service');
 
 class OptionService {
   #model;
-  #categoryModel;
+  #categoryService;
   constructor() {
     autoBind(this);
     this.#model = OptionModel;
-    this.#categoryModel = CategoryModel;
+    this.#categoryService = new CategoryService();
   }
   async create(optionDto) {
     const category = await this.checkExistById(optionDto.category);
+    if (!optionDto.required) optionDto.required = false;
     optionDto.category = category;
     optionDto.key = slugify(optionDto.key, {
       trim: true,
@@ -104,15 +105,13 @@ class OptionService {
     return option;
   }
   async removeById(id) {
-    const option = await this.#model
-      .findById(id, { __v: 0 }, { __id: -1 })
-      .populate([{ path: 'category', select: { name: 1, slug: 1 } }]);
+    const option = await this.checkExistById(id);
     if (!option) throw new createHttpError.NotFound(OptionMessage.NotFound);
     const result = await this.#model.deleteOne({ _id: id });
     return result;
   }
   async checkExistById(id) {
-    const category = await this.#categoryModel.findById(id);
+    const category = await this.#categoryService.checkExistById(id);
     if (!category) throw new createHttpError.NotFound(OptionMessage.NotFound);
     return category;
   }
@@ -120,6 +119,40 @@ class OptionService {
     const isExist = await this.#model.findOne({ category, key });
     if (isExist) throw new createHttpError.Conflict(OptionMessage.AlreadyExist);
     return null;
+  }
+  async update(id, optionDto) {
+    const existOption = await this.findById(id);
+    if (optionDto.category && isValidObjectId(optionDto.category)) {
+      const category = await this.checkExistById(optionDto.category);
+      optionDto.category = category._id;
+    } else {
+      delete optionDto.category;
+    }
+    if (optionDto.slug) {
+      optionDto.key = slugify(optionDto.key, {
+        trim: true,
+        replacement: '_',
+        lower: true,
+      });
+      let categoryId = existOption.category;
+      if (optionDto.category) {
+        categoryId = optionDto.category;
+      }
+      await this.alreadyExistByCategoryAndKey(
+        optionDto.category,
+        optionDto.key
+      );
+    }
+    optionDto.category = existOption.category;
+    if (!optionDto.required) optionDto.required = false;
+    if (optionDto.enum) {
+      optionDto.enum = optionDto.enum.split(',');
+    }
+    const result = await this.#model.updateOne(
+      { _id: id },
+      { $set: optionDto }
+    );
+    return result;
   }
 }
 

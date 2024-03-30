@@ -10,7 +10,15 @@ class OptionController {
   }
   async create(req, res, next) {
     try {
-      const { title, key, guide, type, enum: list, category } = req.body;
+      const {
+        title,
+        key,
+        guide,
+        type,
+        enum: list,
+        category,
+        required,
+      } = req.body;
       await this.#service.create({
         title,
         key,
@@ -18,11 +26,42 @@ class OptionController {
         type,
         enum: list,
         category,
+        required,
       });
       return res.status(HttpCodes.CREATED).json({
         status: 201,
         type: 'CREATED',
         message: OptionMessage.Created,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async update(req, res, next) {
+    try {
+      const {id} = req.params;
+      const {
+        title,
+        key,
+        guide,
+        type,
+        enum: list,
+        category,
+        required,
+      } = req.body;
+      const result = await this.#service.update(id, {
+        title,
+        key,
+        guide,
+        type,
+        enum: list,
+        category,
+        required,
+      });
+      return res.status(HttpCodes.OK).json({
+        status: 200,
+        type: 'OK',
+        result,
       });
     } catch (error) {
       next(error);
