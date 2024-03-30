@@ -5,6 +5,7 @@ const router = Router();
 router.post('/', optionController.create);
 router.get('/by-category/:categoryId', optionController.findByCategoryId);
 router.get('/by-category-slug/:slug', optionController.findByCategorySlug);
+router.delete('/:id', optionController.removeById);
 router.get('/:id', optionController.findById);
 router.get('/', optionController.find);
 

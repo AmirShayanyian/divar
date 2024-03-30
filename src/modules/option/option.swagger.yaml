@@ -4,7 +4,8 @@ tags:
 paths:
   /option:
     post:
-      summary: "Create new option for category"
+      summary: "Create Option Route"
+      description: ''
       tags:
         - "Option"
       requestBody:
@@ -23,7 +24,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CreateOption"
     get:
-      summary: "Get all Options"
+      summary: "Find Options Route"
       tags:
         - "Option"
       responses:
@@ -31,7 +32,7 @@ paths:
           description: "Successful !"
   /option/{id}:
     get:
-      summary: "Get all Options"
+      summary: "Find Option by id Route"
       tags:
         - "Option"
       parameters:
@@ -41,6 +42,17 @@ paths:
       responses:
         200:
           description: "Successful !"
+    delete:
+      summary: "Find and delete a Option by id"
+      tags:
+        - "Option"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+      responses:
+        200:
+          description: "Option Deleted!"
   /option/by-category/{categoryId}:
     get:
       summary: "Find option by category-id"
@@ -49,7 +61,7 @@ paths:
         - "Option"
       parameters:
         - in: "path"
-          name: "categoryId"
+          required: "true"
           type: "string"
       responses:
         200:
@@ -67,6 +79,7 @@ paths:
       responses:
         200:
           description: "Successful !"
+
 components:
   schemas:
     CreateOption:

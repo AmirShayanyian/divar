@@ -30,9 +30,32 @@ class OptionService {
     return option;
   }
   async find() {
-    const options = await this.#model
-      .find({}, { __v: 0 }, { _id: -1 })
-      .populate([{ path: 'category', select: { name: 1, slug: 1 } }]);
+    const options = await this.#model.aggregate([
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $unwind: '$category',
+      },
+      {
+        $addFields: {
+          categorySlug: '$category.slug',
+          categoryName: '$category.name',
+          categoryIcon: '$category.icon',
+        },
+      },
+      {
+        $project: {
+          category: 0,
+          __v: 0,
+        },
+      },
+    ]);
     return options;
   }
   async findById(id) {
@@ -79,6 +102,14 @@ class OptionService {
       },
     ]);
     return option;
+  }
+  async removeById(id) {
+    const option = await this.#model
+      .findById(id, { __v: 0 }, { __id: -1 })
+      .populate([{ path: 'category', select: { name: 1, slug: 1 } }]);
+    if (!option) throw new createHttpError.NotFound(OptionMessage.NotFound);
+    const result = await this.#model.deleteOne({ _id: id });
+    return result;
   }
   async checkExistById(id) {
     const category = await this.#categoryModel.findById(id);
