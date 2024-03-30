@@ -1,0 +1,32 @@
+tags:
+  - name: "Option"
+    description: "Option Module and Routes"
+paths:
+  /option:
+    post:
+      summary: "Create new option for category"
+      tags:
+        - "Option"
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CreateOption"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOption"
+      responses:
+        201:
+          description: "Option created Successfully"
+  /option/{categoryId}:
+    get:
+      summary: "Get all categories"
+      tags:
+        - "Option"
+      parameters:
+        - in: "path"
+          name: "categoryId"
+          type: "string"
+      responses:
+        200:
+          description: "Successful !"
