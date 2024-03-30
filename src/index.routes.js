@@ -11,5 +11,7 @@ router.use('/auth', AuthRoutes);
 router.use('/user', AuthGuard, UserRoutes);
 router.use('/category', CategoryRoutes);
 router.use('/option', OptionRoutes);
-
+router.get('/', (req, res) => {
+  res.render('./pages/index.ejs');
+});
 module.exports = router;
